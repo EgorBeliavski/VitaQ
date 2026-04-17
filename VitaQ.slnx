@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="../TestLib/TestLib.csproj" Id="1c41110e-f26c-4d9a-96a6-a870ed14d204" />
+  <Project Path="VitaQ.csproj" />
+</Solution>

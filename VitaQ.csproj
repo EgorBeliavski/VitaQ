@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+ <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework> <!-- Или net7.0 / net8.0 -->
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    
+    
+    <PackageId>VitaQ.ObjectPool</PackageId> 
+    <Version>1.0.0</Version> 
+    <Authors>Georgie Beliavski</Authors> 
+    <Company>VitaQ</Company>
+    <Description>A high-performance, general-purpose object pool for .NET with cleanup policies and metrics support.</Description>
+    <PackageTags>object-pool;performance;memory;thread-safe;StringBuilder;pooling</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression> 
+    <RepositoryUrl>https://github.com/твой-ник/VitaQ</RepositoryUrl> <!-- Ссылка на GitHub (пока пустая) -->
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild> <!-- Автоматически создавать .nupkg при сборке -->
+  </PropertyGroup>
+
+</Project>
