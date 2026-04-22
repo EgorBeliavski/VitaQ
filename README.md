@@ -42,9 +42,9 @@ pool.Return(sb);
 using VitaQ.Pools;
 
 // StringBuilder
-var sb = StringBuilderPool.Borrow();
+var sb = StringBuilderPoolWay.Borrow();
 sb.Append("Data");
-StringBuilderPool.Return(sb);
+StringBuilderPoolWay.Return(sb);
 
 // List<int>
 var list = ListPoolWay<int>.Borrow();
