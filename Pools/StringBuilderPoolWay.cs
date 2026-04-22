@@ -8,27 +8,23 @@ namespace VitaQ
 {
     
 
-    public class StringBuilderPoolWay : IPooledObjectPolicy<StringBuilder>
+    public static class StringBuilderPoolWay
     {
         private const int MaxCapacityChars = 5_000_000;
         private const int DefaultCapacity = 256;
 
 
-        private readonly ConcurrentQueue<StringBuilder> _pool = new();
+        private static readonly ConcurrentQueue<StringBuilder> _pool = new();
 
-        private readonly int _maxSize;
+        private readonly static int _maxSize = 100;
 
-        private int _active;
-        private int _hits;
-        private int _misses;
+        private static int _active;
+        private static int _hits;
+        private static int _misses;
 
-        public StringBuilderPoolWay(int maxSize = 100)
-        {
+        
 
-            _maxSize = maxSize;
-        }
-
-        public StringBuilder Borrow()
+        public static StringBuilder Borrow()
         {
             if (_pool.TryDequeue(out var item))
             {
@@ -42,9 +38,9 @@ namespace VitaQ
 
             Interlocked.Increment(ref _misses);
             Interlocked.Increment(ref _active);
-            return new StringBuilder();
+            return new StringBuilder(DefaultCapacity);
         }
-        public void Return(StringBuilder item)
+        public static void Return(StringBuilder item)
         {
             if (item == null) return;
 
@@ -64,7 +60,7 @@ namespace VitaQ
             }
         }
 
-        public void PreWarm(int count)
+        public static void PreWarm(int count)
         {
             for (int i = 0; i < count; i++)
             {
@@ -73,7 +69,7 @@ namespace VitaQ
             }
         }
 
-        public void Clear()
+        public static void Clear()
         {
             while (_pool.TryDequeue(out _)) { }
             Interlocked.Exchange(ref _active, 0);
@@ -81,9 +77,9 @@ namespace VitaQ
             Interlocked.Exchange(ref _misses, 0);
         }
 
-        public int ReturnActive() => Interlocked.CompareExchange(ref _active, 0, 0);
-        public int ReturnHits() => Interlocked.CompareExchange(ref _hits, 0, 0);
-        public int ReturnMisses() => Interlocked.CompareExchange(ref _misses, 0, 0);
+        public static int ReturnActive() => Interlocked.CompareExchange(ref _active, 0, 0);
+        public static int ReturnHits() => Interlocked.CompareExchange(ref _hits, 0, 0);
+        public static int ReturnMisses() => Interlocked.CompareExchange(ref _misses, 0, 0);
 
 
     }
