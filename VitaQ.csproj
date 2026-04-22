@@ -15,5 +15,10 @@
 		<RepositoryUrl>https://github.com/EgorBeliavski/VitaQ.git</RepositoryUrl>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<PackageOutputPath>$(SolutionDir)nupkg</PackageOutputPath>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
 	</PropertyGroup>
+	<ItemGroup>
+		<None Include="README.md" Pack="true" PackagePath="\" />
+	
+	</ItemGroup>
 </Project>
