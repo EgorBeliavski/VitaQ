@@ -23,23 +23,7 @@ dotnet add package VitaQ.ObjectPool
 ** Quick Start
 Using the Universal Pool
 
-using VitaQ.Core;
-
-
-// Create a policy for StringBuilder
-
-
-
-// Take an object from the pool
-var sb = pool.Borrow();
-sb.Append("Hello, World!");
-
-// Return it (the object is automatically cleared)
-pool.Return(sb);
-
-
-
-using VitaQ.Pools;
+using VitaQ;
 
 // StringBuilder
 var sb = StringBuilderPoolWay.Borrow();
@@ -50,3 +34,4 @@ StringBuilderPoolWay.Return(sb);
 var list = ListPoolWay<int>.Borrow();
 list.Add(42);
 ListPool<int>.Return(list);
+
