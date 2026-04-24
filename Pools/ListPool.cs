@@ -1,26 +1,35 @@
 ﻿
 using System.Collections.Concurrent;
+using System.Text;
+using VitaQ.Core;
 
 
 
 namespace VitaQ
 {
-    public static class ListPoolWay<T>
+    public class ListPool<T> : IAdvanced<List<T>>, ISafePool<List<T>>
     {
-        private const int MaxCapacity = 100000;
-        private const int DefaultCapacity = 20;
+        private const int MaxCount = 100000;
+        
 
 
         private readonly static ConcurrentQueue<List<T>> _pool = new();
 
-        private readonly static int _maxSize = 100;
+        private readonly int _maxSize = 100;
 
-        private static int _active;
-        private static int _hits;
-        private static int _misses;
+        private int _active;
+        private int _hits;
+        private int _misses;
 
-       
-        public static List<T> Borrow()
+
+        public int ActiveCount => Volatile.Read(ref _active);
+        public int Hits => Volatile.Read(ref _hits);
+        public int Misses => Volatile.Read(ref _misses);
+        public PooledObject<List<T>> Get()
+        {
+            return new PooledObject<List<T>>(Borrow(), Return);
+        }
+        public List<T> Borrow()
         {
             if (_pool.TryDequeue(out var item))
             {
@@ -34,19 +43,16 @@ namespace VitaQ
 
             Interlocked.Increment(ref _misses);
             Interlocked.Increment(ref _active);
-            return new List<T>(DefaultCapacity);
+            return new List<T>();
         }
-        public static void Return(List<T> item)
+        public void Return(List<T> item)
         {
             if (item == null) return;
 
             Interlocked.Decrement(ref _active);
 
 
-            if (item.Capacity > MaxCapacity)
-            {
-                return;
-            }
+            
 
             item.Clear();
 
@@ -56,16 +62,18 @@ namespace VitaQ
             }
         }
 
-        public static void PreWarm(int count)
+        
+
+        public void PreWarm(int count)
         {
             for (int i = 0; i < count; i++)
             {
-                var newItem = new List<T>(DefaultCapacity);
+                var newItem = new List<T>();
                 Return(newItem);
             }
         }
 
-        public static void Clear()
+        public void Clear()
         {
             while (_pool.TryDequeue(out _)) { }
             Interlocked.Exchange(ref _active, 0);
@@ -73,9 +81,7 @@ namespace VitaQ
             Interlocked.Exchange(ref _misses, 0);
         }
 
-        public static int ReturnActive() => Interlocked.CompareExchange(ref _active, 0, 0);
-        public static int ReturnHits() => Interlocked.CompareExchange(ref _hits, 0, 0);
-        public static int ReturnMisses() => Interlocked.CompareExchange(ref _misses, 0, 0);
+       
 
     }
 }
