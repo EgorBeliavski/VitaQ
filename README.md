@@ -21,59 +21,46 @@ A high-performance, general-purpose object pool for .NET with cleanup policies a
     🧵 Thread-Safe: All operations are concurrency-safe out of the box.
 
 ## 📦 Installation
+    Install the package via the .NET CLI:
+    ```bash
+    dotnet add package VitaQ.ObjectPool
+    Or via .NET CLI:
+    dotnet add package VitaQ.ObjectPool
 
-Install the package via the .NET CLI:
-
-```bash
-dotnet add package VitaQ.ObjectPool
-
-Or via .NET CLI:
-dotnet add package VitaQ.ObjectPool
-
-
-🚀 Quick Start
+## 🚀 Quick Start
 StringBuilderPool
-
     ```csharp
     using VitaQ;
-
     var pool = new StringBuilderPool();
-
     // ✅ Safe API: automatic return via `using`
     using var sb = pool.Get();
     sb.Value.Append("Hello, ");
     sb.Value.AppendLine("World!");
-
     Console.WriteLine(sb.Value.ToString());
     // ← sb is automatically returned to the pool here
 
 ListPool<T>
     ```csharp
     using VitaQ;
-
     var pool = new ListPool<int>();
-
     using var list = pool.Get();
     list.Value.Add(1);
     list.Value.Add(2);
     list.Value.Add(3);
-
     // Use the list...
     // ← automatically returned on dispose
 
-⚙️ API Levels: Safe & Unsafe
+## ⚙️ API Levels: Safe & Unsafe
 Safe API (Recommended)
     Use Get() + using for guaranteed, exception-safe return:
     ```csharp
     using var sb = pool.Get();
     sb.Value.Append("data");
     // ← auto-return on scope exit
-
     Benefits:
     No risk of forgetting to return the object
     Works with try/finally under the hood
     Detected by static analyzers (CA2000)
-
 Unsafe API (Advanced)
     Manual Borrow()/Return() — use only if you've measured allocations and confirmed the need:
     ```csharp
@@ -121,7 +108,7 @@ Unsafe API (Advanced)
 
     sb.Value.Append("more"); // ObjectDisposedException or race condition
 
-🤝 Contributing
+## 🤝 Contributing
 Contributions are welcome! To get started:
     Fork the repository
     Create a feature branch (git checkout -b feature/amazing-feature)
@@ -133,7 +120,7 @@ Contributions are welcome! To get started:
     Add benchmarks to BenchmarkDotNet for performance changes
     Update this README if you change public APIs
 
-📄 License
+## 📄 License
     Distributed under the MIT License. See LICENSE for more information.
     MIT License 
 
