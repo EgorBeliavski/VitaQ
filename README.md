@@ -29,7 +29,6 @@ A high-performance, general-purpose object pool for .NET with cleanup policies a
 
 ## 🚀 Quick Start
 StringBuilderPool
-    ```csharp
     using VitaQ;
     var pool = new StringBuilderPool();
     // ✅ Safe API: automatic return via `using`
@@ -40,7 +39,6 @@ StringBuilderPool
     // ← sb is automatically returned to the pool here
 
 ListPool<T>
-    ```csharp
     using VitaQ;
     var pool = new ListPool<int>();
     using var list = pool.Get();
@@ -53,7 +51,7 @@ ListPool<T>
 ## ⚙️ API Levels: Safe & Unsafe
 Safe API (Recommended)
     Use Get() + using for guaranteed, exception-safe return:
-    ```csharp
+    
     using var sb = pool.Get();
     sb.Value.Append("data");
     // ← auto-return on scope exit
@@ -63,7 +61,7 @@ Safe API (Recommended)
     Detected by static analyzers (CA2000)
 Unsafe API (Advanced)
     Manual Borrow()/Return() — use only if you've measured allocations and confirmed the need:
-    ```csharp
+    
     var sb = pool.Borrow();
     try 
     {
@@ -87,7 +85,7 @@ Unsafe API (Advanced)
 
 ## ⚠️ Common Pitfalls
     ❌ Don't save .Value outside using
-    ```csharp
+   
     StringBuilder leaked;
     using (var sb = pool.Get())
     {
@@ -96,12 +94,12 @@ Unsafe API (Advanced)
     leaked.Append("data"); // ❌ Race condition / data corruption!
 
     ❌ Don't return external objects
-    ```csharp
+    
     var mySb = new StringBuilder();
     pool.Return(mySb); // ⚠️ Breaks pool contract — avoid
 
     ❌Don't use after return
-    ```csharp
+    
     using var sb = pool.Get();
     // ... use sb.Value ...
     // ← auto-return happens here
