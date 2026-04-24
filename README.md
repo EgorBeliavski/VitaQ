@@ -31,7 +31,7 @@ Or via .NET CLI:
 dotnet add package VitaQ.ObjectPool
 
 
-## 🚀 Quick Start
+🚀 Quick Start
 StringBuilderPool
 
     ```csharp
@@ -61,7 +61,7 @@ ListPool<T>
     // Use the list...
     // ← automatically returned on dispose
 
-## ⚙️ API Levels: Safe & Unsafe
+⚙️ API Levels: Safe & Unsafe
 Safe API (Recommended)
     Use Get() + using for guaranteed, exception-safe return:
     ```csharp
@@ -121,7 +121,7 @@ Unsafe API (Advanced)
 
     sb.Value.Append("more"); // ObjectDisposedException or race condition
 
-## 🤝 Contributing
+🤝 Contributing
 Contributions are welcome! To get started:
     Fork the repository
     Create a feature branch (git checkout -b feature/amazing-feature)
@@ -133,7 +133,7 @@ Contributions are welcome! To get started:
     Add benchmarks to BenchmarkDotNet for performance changes
     Update this README if you change public APIs
 
-## 📄 License
+📄 License
     Distributed under the MIT License. See LICENSE for more information.
     MIT License 
 
