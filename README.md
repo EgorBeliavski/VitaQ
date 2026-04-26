@@ -5,7 +5,7 @@ A high-performance, general-purpose object pool for .NET with cleanup policies a
 - [📦 Installation](#-installation)
 - [🚀 Quick Start](#-quick-start)
 - [⚙️ API Levels: Safe & Unsafe](#️-api-levels-safe--unsafe)
-- [🔗 Dependency Injection (DI)](#️-dependency-injection)
+- [🔗 Dependency Injection](#️-dependency-injection)
 - [🔧 Configuration](#-configuration)
 - [📊 Metrics](#-metrics)
 - [⚠️ Common Pitfalls](#️-common-pitfalls)
@@ -80,9 +80,12 @@ VitaQ integrates seamlessly with Microsoft.Extensions.DependencyInjection.
 
 
 Add to Program.cs (or Startup.cs):
+
     builder.Services.AddStringBuilderPool();
     builder.Services.AddListPool<int>(); // specify your <T> type
+
 Inject the ISafePool<T> interface, never the concrete class:
+
         public class MyService
         {
             private readonly ISafePool<StringBuilder> _pool;
