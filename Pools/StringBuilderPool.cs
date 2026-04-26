@@ -1,17 +1,23 @@
 ﻿using System.Collections.Concurrent;
 using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 using VitaQ;
-using VitaQ.Core;
+
 
 
 namespace VitaQ
 {
     
-    
+
+
     public class StringBuilderPool : IAdvanced<StringBuilder>,ISafePool<StringBuilder>
     {
+       
+
+
+
         private const int MaxCapacityChars = 5_000_000;
         private const int DefaultCapacity = 256;
 
@@ -24,7 +30,7 @@ namespace VitaQ
         private static int _hits;
         private static int _misses;
 
-
+     
         public int ActiveCount => Volatile.Read(ref _active);
         public int Hits => Volatile.Read(ref _hits);
         public int Misses => Volatile.Read(ref _misses);
@@ -38,11 +44,13 @@ namespace VitaQ
         
         public StringBuilder Borrow()
         {
+
             if (_pool.TryDequeue(out var item))
             {
 
                 Interlocked.Increment(ref _hits);
                 Interlocked.Increment(ref _active);
+                
                 return item;
 
 

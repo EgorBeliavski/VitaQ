@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace VitaQ.Core
+namespace VitaQ
 {
     public interface IAdvanced<T> where T : class
     {
@@ -25,10 +25,6 @@ namespace VitaQ.Core
         [EditorBrowsable(EditorBrowsableState.Never)]
         void Clear();
 
-        //int ReturnActive();
-
-        //int ReturnHits();
-
-        //int ReturnMisses();
+        
     }
 }

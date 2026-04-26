@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace VitaQ.Core
+namespace VitaQ
 {
     public sealed class PooledObject<T> : IDisposable  where T : class 
     {
