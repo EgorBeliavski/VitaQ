@@ -5,6 +5,7 @@ A high-performance, general-purpose object pool for .NET with cleanup policies a
 - [📦 Installation](#-installation)
 - [🚀 Quick Start](#-quick-start)
 - [⚙️ API Levels: Safe & Unsafe](#️-api-levels-safe--unsafe)
+- [🔗 Dependency Injection (DI)](#️-dependency-injection-(DI))
 - [🔧 Configuration](#-configuration)
 - [📊 Metrics](#-metrics)
 - [⚠️ Common Pitfalls](#️-common-pitfalls)
@@ -74,6 +75,29 @@ Unsafe API (Advanced)
         pool.Return(sb); //  MUST call, or memory leak!
     }
     Warning: Forgetting Return() causes pool exhaustion and memory leaks. Always prefer the Safe API.
+## 🔗 Dependency Injection (DI)
+VitaQ integrates seamlessly with Microsoft.Extensions.DependencyInjection.
+
+
+Add to Program.cs (or Startup.cs):
+    builder.Services.AddStringBuilderPool();
+    builder.Services.AddListPool<int>(); // specify your <T> type
+Inject the ISafePool<T> interface, never the concrete class:
+    public class MyService
+        {
+            private readonly ISafePool<StringBuilder> _pool;
+            public MyService(ISafePool<StringBuilder> pool) => _pool = pool;
+
+            public void Process()
+            {
+                using var sb = _pool.Get();
+                sb.Value.Append("Data");
+                // ← auto-returned to pool on dispose
+            }
+        }
+Pools are registered as Singleton (single instance per application lifetime).
+Always depend on ISafePool<T>, not the implementation.
+Use Get() + using → guarantees safe return even on exceptions.
 
 ## 🔧 Configuration
     MaxCapacity / MaxCount--5_000_000 / 100_000--Max size for an object to be accepted back into the pool
