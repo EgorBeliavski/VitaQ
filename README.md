@@ -28,6 +28,7 @@ A high-performance, general-purpose object pool for .NET with cleanup policies a
     dotnet add package VitaQ.ObjectPool
 
 ## 🚀 Quick Start
+
 StringBuilderPool
     using VitaQ;
     var pool = new StringBuilderPool();
@@ -49,6 +50,7 @@ ListPool<T>
     // ← automatically returned on dispose
 
 ## ⚙️ API Levels: Safe & Unsafe
+
 Safe API (Recommended)
     Use Get() + using for guaranteed, exception-safe return:
     
