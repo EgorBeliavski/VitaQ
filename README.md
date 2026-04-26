@@ -29,25 +29,25 @@ A high-performance, general-purpose object pool for .NET with cleanup policies a
 
 ## 🚀 Quick Start
 
-StringBuilderPool
-    using VitaQ;
-    var pool = new StringBuilderPool();
-    // ✅ Safe API: automatic return via `using`
-    using var sb = pool.Get();
-    sb.Value.Append("Hello, ");
-    sb.Value.AppendLine("World!");
-    Console.WriteLine(sb.Value.ToString());
-    // ← sb is automatically returned to the pool here
+    StringBuilderPool
+        using VitaQ;
+        var pool = new StringBuilderPool();
+        // ✅ Safe API: automatic return via `using`
+        using var sb = pool.Get();
+        sb.Value.Append("Hello, ");
+        sb.Value.AppendLine("World!");
+        Console.WriteLine(sb.Value.ToString());
+        // ← sb is automatically returned to the pool here
 
-ListPool<T>
-    using VitaQ;
-    var pool = new ListPool<int>();
-    using var list = pool.Get();
-    list.Value.Add(1);
-    list.Value.Add(2);
-    list.Value.Add(3);
-    // Use the list...
-    // ← automatically returned on dispose
+    ListPool<T>
+        using VitaQ;
+        var pool = new ListPool<int>();
+        using var list = pool.Get();
+        list.Value.Add(1);
+        list.Value.Add(2);
+        list.Value.Add(3);
+        // Use the list...
+        // ← automatically returned on dispose
 
 ## ⚙️ API Levels: Safe & Unsafe
 
