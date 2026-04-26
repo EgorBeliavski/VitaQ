@@ -5,7 +5,7 @@ A high-performance, general-purpose object pool for .NET with cleanup policies a
 - [📦 Installation](#-installation)
 - [🚀 Quick Start](#-quick-start)
 - [⚙️ API Levels: Safe & Unsafe](#️-api-levels-safe--unsafe)
-- [🔗 Dependency Injection](#️-dependency-injection)
+- [🔗 Dependency Injection](#-dependency-injection)
 - [🔧 Configuration](#-configuration)
 - [📊 Metrics](#-metrics)
 - [⚠️ Common Pitfalls](#️-common-pitfalls)
