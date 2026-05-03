@@ -12,17 +12,17 @@ namespace VitaQ
     {
         private const int MaxCount = 100000;
 
-        private static readonly Meter _meter = new("VitaQ", "1.1.0");
+        private  readonly Meter _meter = new("VitaQ", "1.1.0");
         private readonly int _localmaxSize = 5;
         private readonly  ConcurrentQueue<List<T>> _pool = new();
         private readonly ThreadLocal<Queue<List<T>>> _localpool = new(() => new Queue<List<T>>(), trackAllValues: true);
         private readonly int _maxSize = 100;
 
-        private static int _active;
-        private static int _hits;
-        private static int _misses;
+        private  int _active;
+        private  int _hits;
+        private  int _misses;
 
-        static ListPool()
+        public ListPool()
         {
             _meter.CreateObservableGauge("app.state.active", () => Volatile.Read(ref _active));
             _meter.CreateObservableGauge("app.state.hits", () => Volatile.Read(ref _hits));
