@@ -75,6 +75,17 @@ Unsafe API (Advanced)
         pool.Return(sb); //  MUST call, or memory leak!
     }
     Warning: Forgetting Return() causes pool exhaustion and memory leaks. Always prefer the Safe API.
+
+## 🧹 Clear() Method
+    `Clear()` empties all pools (local + global) and resets metrics.
+
+### Use cases:
+    - ✅ Integration tests (reset state between test runs)
+    - ✅ Graceful shutdown (free memory before process exit)
+    - ✅ Dynamic reconfiguration (rare)
+
+### ⚠️ Warning:
+    `Clear()` is **not thread-safe** during active use. If called while other threads are borrowing/returning, race conditions may occur. Always ensure the pool is idle before calling `Clear()`.
 ## 🔗 Dependency Injection
 VitaQ integrates seamlessly with Microsoft.Extensions.DependencyInjection.
 
@@ -106,6 +117,21 @@ Use Get() + using → guarantees safe return even on exceptions.
     MaxCapacity / MaxCount--5_000_000 / 100_000--Max size for an object to be accepted back into the pool
     DefaultCapacity--256--Initial capacity for newly created objects
     MaxPoolSize--100--Maximum items stored in the pool (excess are discarded)
+## 🧵 Thread-Local Behavior
+    VitaQ uses a hybrid pooling strategy:
+
+    1. **Per-thread cache**: Each thread has a private queue (default max size: 5 items)
+    2. **Global queue**: Shared `ConcurrentQueue<T>` for overflow and cross-thread distribution
+    3. **Fallback**: If both are empty, a new object is created
+
+### Why this matters:
+    - ✅ Zero contention for hot paths (thread works only with its own cache)
+    - ✅ Better CPU cache locality (LIFO return → reuse "warm" objects)
+    - ✅ Automatic load balancing (overflow spills to global queue)
+
+### Tuning:
+    - `_localmaxSize` (default: 5): Max items per thread cache. Increase for bursty single-threaded workloads.
+    - `_maxSize` (default: 100): Max items in global queue. Increase for high-concurrency scenarios.
 
 ## 📊 Metrics
     Hits--Objects taken from the pool--High = good reuse, pool is effective

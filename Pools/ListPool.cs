@@ -1,5 +1,6 @@
 ﻿
 using System.Collections.Concurrent;
+using System.Diagnostics.Metrics;
 using System.Text;
 
 
@@ -10,20 +11,29 @@ namespace VitaQ
     public class ListPool<T> : IAdvanced<List<T>>, ISafePool<List<T>>
     {
         private const int MaxCount = 100000;
-        
 
+        private static readonly Meter _meter = new("VitaQ", "1.1.0");
 
-        private readonly static ConcurrentQueue<List<T>> _pool = new();
+        private readonly  ConcurrentQueue<List<T>> _pool = new();
 
         private readonly int _maxSize = 100;
 
-        private int _active;
-        private int _hits;
-        private int _misses;
+        private static int _active;
+        private static int _hits;
+        private static int _misses;
 
+        static ListPool()
+        {
+            _meter.CreateObservableGauge("app.state.active", () => Volatile.Read(ref _active));
+            _meter.CreateObservableGauge("app.state.hits", () => Volatile.Read(ref _hits));
+            _meter.CreateObservableGauge("app.state.misses", () => Volatile.Read(ref _misses));
+        }
 
+        [Obsolete("Use OpenTelemetry metrics 'app.state.active' instead.")]
         public int ActiveCount => Volatile.Read(ref _active);
+        [Obsolete("Use OpenTelemetry metrics 'app.state.hits' instead.")]
         public int Hits => Volatile.Read(ref _hits);
+        [Obsolete("Use OpenTelemetry metrics 'app.state.misses' instead.")]
         public int Misses => Volatile.Read(ref _misses);
         public PooledObject<List<T>> Get()
         {
