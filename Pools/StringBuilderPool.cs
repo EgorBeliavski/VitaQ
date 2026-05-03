@@ -18,7 +18,7 @@ namespace VitaQ
     {
 
 
-        private static readonly Meter _meter = new("VitaQ", "1.1.0");
+        private  readonly Meter _meter = new("VitaQ", "1.1.0");
 
         private const int MaxCapacityChars = 5_000_000;
         private const int DefaultCapacity = 256;

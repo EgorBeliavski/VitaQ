@@ -13,9 +13,9 @@ namespace VitaQ
         private const int MaxCount = 100000;
 
         private static readonly Meter _meter = new("VitaQ", "1.1.0");
-
+        private readonly int _localmaxSize = 5;
         private readonly  ConcurrentQueue<List<T>> _pool = new();
-
+        private readonly ThreadLocal<Queue<List<T>>> _localpool = new(() => new Queue<List<T>>(), trackAllValues: true);
         private readonly int _maxSize = 100;
 
         private static int _active;
@@ -41,14 +41,24 @@ namespace VitaQ
         }
         public List<T> Borrow()
         {
+            if (_localpool.Value.Count > 0)
+            {
+
+                Interlocked.Increment(ref _hits);
+                Interlocked.Increment(ref _active);
+
+                return _localpool.Value.Dequeue();
+
+
+            }
+
             if (_pool.TryDequeue(out var item))
             {
 
                 Interlocked.Increment(ref _hits);
                 Interlocked.Increment(ref _active);
+
                 return item;
-
-
             }
 
             Interlocked.Increment(ref _misses);
@@ -61,10 +71,14 @@ namespace VitaQ
 
             Interlocked.Decrement(ref _active);
 
+            item.Clear();
+            if (_localpool.Value.Count < _localmaxSize)
+            {
+                _localpool.Value.Enqueue(item);
+                return;
+            }
 
             
-
-            item.Clear();
 
             if (_pool.Count < _maxSize)
             {
@@ -85,6 +99,10 @@ namespace VitaQ
 
         public void Clear()
         {
+            foreach (var item in _localpool.Values)
+            {
+                item.Clear();
+            }
             while (_pool.TryDequeue(out _)) { }
             Interlocked.Exchange(ref _active, 0);
             Interlocked.Exchange(ref _hits, 0);
